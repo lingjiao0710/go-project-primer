@@ -36,7 +36,6 @@ func (l Logger) Debug(format string, args ...interface{}) {
 	if l.enable(DEBUG) {
 		log(DEBUG, format, args...)
 	}
-
 }
 
 //Trace 跟踪级别

@@ -8,7 +8,8 @@ import (
 func main() {
 
 	//logger.GetInfo(1)
-	mlog := logger.NewLog("debug")
+	//mlog := logger.NewLog("debug")
+	mlog := logger.NewFileLogger("debug", "./", "log.txt", 1024)
 	for {
 		mlog.Debug("%s %v", "一条日志", 10)
 		mlog.Trace("一条日志")
