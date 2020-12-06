@@ -23,7 +23,8 @@ func (l Logger) enable(level LogLevel) bool {
 	return level >= l.Level
 }
 
-func log(lv LogLevel, msg string) {
+func log(lv LogLevel, format string, args ...interface{}) {
+	msg := fmt.Sprintf(format, args...)
 	timeFormat := time.Now().Format("2006-01-02 15:04:05")
 	funcName, fileName, line := getInfo(3)
 
@@ -31,44 +32,44 @@ func log(lv LogLevel, msg string) {
 }
 
 //Debug 调试级别
-func (l Logger) Debug(msg string) {
+func (l Logger) Debug(format string, args ...interface{}) {
 	if l.enable(DEBUG) {
-		log(DEBUG, msg)
+		log(DEBUG, format, args...)
 	}
 
 }
 
 //Trace 跟踪级别
-func (l Logger) Trace(msg string) {
+func (l Logger) Trace(format string, args ...interface{}) {
 	if l.enable(TRACE) {
-		log(TRACE, msg)
+		log(TRACE, format, args...)
 	}
 }
 
 //Info 信息级别
-func (l Logger) Info(msg string) {
+func (l Logger) Info(format string, args ...interface{}) {
 	if l.enable(INFO) {
-		log(INFO, msg)
+		log(INFO, format, args...)
 	}
 }
 
 //Warning 警告级别
-func (l Logger) Warning(msg string) {
+func (l Logger) Warning(format string, args ...interface{}) {
 	if l.enable(WARNING) {
-		log(WARNING, msg)
+		log(WARNING, format, args...)
 	}
 }
 
 //Error 错误级别
-func (l Logger) Error(msg string) {
+func (l Logger) Error(format string, args ...interface{}) {
 	if l.enable(ERROR) {
-		log(ERROR, msg)
+		log(ERROR, format, args...)
 	}
 }
 
 //Fatal 致命错误
-func (l Logger) Fatal(msg string) {
+func (l Logger) Fatal(format string, args ...interface{}) {
 	if l.enable(FATAL) {
-		log(FATAL, msg)
+		log(FATAL, format, args...)
 	}
 }

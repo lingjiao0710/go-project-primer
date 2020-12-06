@@ -8,9 +8,9 @@ import (
 func main() {
 
 	//logger.GetInfo(1)
-	mlog := logger.NewLog("fatal")
+	mlog := logger.NewLog("debug")
 	for {
-		mlog.Debug("一条日志")
+		mlog.Debug("%s %v", "一条日志", 10)
 		mlog.Trace("一条日志")
 		mlog.Info("一条日志")
 		mlog.Warning("一条日志")
