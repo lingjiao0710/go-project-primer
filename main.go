@@ -6,7 +6,9 @@ import (
 )
 
 func main() {
-	mlog := logger.NewLog("error")
+
+	//logger.GetInfo(1)
+	mlog := logger.NewLog("fatal")
 	for {
 		mlog.Debug("一条日志")
 		mlog.Trace("一条日志")

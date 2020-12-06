@@ -3,46 +3,14 @@ package logger
 import (
 	"fmt"
 	"os"
-	"strings"
 	"time"
-)
-
-type LogLevel int16
-
-const (
-	UNKNOWN LogLevel = iota
-	DEBUG
-	TRACE
-	INFO
-	WARNING
-	ERROR
-	FATAL
 )
 
 type Logger struct {
 	Level LogLevel
 }
 
-func parseLogLevel(levelString string) LogLevel {
-	lowerString := strings.ToLower(levelString)
-	switch lowerString {
-	case "debug":
-		return DEBUG
-	case "trace":
-		return TRACE
-	case "info":
-		return INFO
-	case "warning":
-		return WARNING
-	case "error":
-		return ERROR
-	case "fatal":
-		return FATAL
-	default:
-		return INFO
-	}
-}
-
+//NewLog 初始化日志结构
 func NewLog(levelString string) Logger {
 	logLevel := parseLogLevel(levelString)
 	return Logger{
@@ -50,55 +18,57 @@ func NewLog(levelString string) Logger {
 	}
 }
 
+//enable 日志开关
 func (l Logger) enable(level LogLevel) bool {
 	return level >= l.Level
 }
 
+func log(lv LogLevel, msg string) {
+	timeFormat := time.Now().Format("2006-01-02 15:04:05")
+	funcName, fileName, line := getInfo(3)
+
+	fmt.Fprintf(os.Stdout, "[%s] [%s] [%s:%s:%d] %s\n", timeFormat, getLogString(lv), fileName, funcName, line, msg)
+}
+
+//Debug 调试级别
 func (l Logger) Debug(msg string) {
 	if l.enable(DEBUG) {
-		timeFormat := time.Now().Format("2006-01-02 15:04:05")
-
-		fmt.Fprintf(os.Stdout, "[%s] [DEBUG] %s\n", timeFormat, msg)
+		log(DEBUG, msg)
 	}
 
 }
 
+//Trace 跟踪级别
 func (l Logger) Trace(msg string) {
 	if l.enable(TRACE) {
-		timeFormat := time.Now().Format("2006-01-02 15:04:05")
-
-		fmt.Fprintf(os.Stdout, "[%s] [TRACE] %s\n", timeFormat, msg)
+		log(TRACE, msg)
 	}
 }
 
+//Info 信息级别
 func (l Logger) Info(msg string) {
 	if l.enable(INFO) {
-		timeFormat := time.Now().Format("2006-01-02 15:04:05")
-
-		fmt.Fprintf(os.Stdout, "[%s] [INFO] %s\n", timeFormat, msg)
+		log(INFO, msg)
 	}
 }
 
+//Warning 警告级别
 func (l Logger) Warning(msg string) {
 	if l.enable(WARNING) {
-		timeFormat := time.Now().Format("2006-01-02 15:04:05")
-
-		fmt.Fprintf(os.Stdout, "[%s] [WARNING] %s\n", timeFormat, msg)
+		log(WARNING, msg)
 	}
 }
 
+//Error 错误级别
 func (l Logger) Error(msg string) {
 	if l.enable(ERROR) {
-		timeFormat := time.Now().Format("2006-01-02 15:04:05")
-
-		fmt.Fprintf(os.Stdout, "[%s] [ERROR] %s\n", timeFormat, msg)
+		log(ERROR, msg)
 	}
 }
 
+//Fatal 致命错误
 func (l Logger) Fatal(msg string) {
 	if l.enable(FATAL) {
-		timeFormat := time.Now().Format("2006-01-02 15:04:05")
-
-		fmt.Fprintf(os.Stdout, "[%s] [FATAL] %s\n", timeFormat, msg)
+		log(FATAL, msg)
 	}
 }
