@@ -19,6 +19,15 @@ const (
 	FATAL
 )
 
+type Logger interface {
+	Debug(format string, args ...interface{})
+	Trace(format string, args ...interface{})
+	Info(format string, args ...interface{})
+	Warning(format string, args ...interface{})
+	Error(format string, args ...interface{})
+	Fatal(format string, args ...interface{})
+}
+
 //parseLogLevel 将字符串日志级别解析为常量
 func parseLogLevel(levelString string) LogLevel {
 	lowerString := strings.ToLower(levelString)

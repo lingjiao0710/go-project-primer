@@ -2,14 +2,15 @@ package main
 
 import (
 	"github.com/lingjiao0710/test/logger"
-	"time"
 )
+
+var mlog logger.Logger
 
 func main() {
 
 	//logger.GetInfo(1)
-	//mlog := logger.NewLog("debug")
-	mlog := logger.NewFileLogger("debug", "./", "log.txt", 1024)
+	mlog = logger.NewConsoleLogger("debug")
+	//mlog = logger.NewFileLogger("debug", "./", "log.txt", 10*1024*1024)
 	for {
 		mlog.Debug("%s %v", "一条日志", 10)
 		mlog.Trace("一条日志")
@@ -18,7 +19,7 @@ func main() {
 		mlog.Error("一条日志")
 		mlog.Fatal("trace log ....")
 
-		time.Sleep(time.Second)
+		//time.Sleep(time.Second)
 	}
 
 }
