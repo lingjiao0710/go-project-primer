@@ -8,3 +8,4 @@
 
 - ### Gophercises-02 URL SHORTER [url shorter](https://github.com/lingjiao0710/go-project-primer/tree/master/gophercise/urlshort)
 
+- ### Gophercises-03 Choose Your Own Adventure [Choose Your Own Adventure](https://github.com/lingjiao0710/go-project-primer/tree/master/gophercise/03cyoa)
