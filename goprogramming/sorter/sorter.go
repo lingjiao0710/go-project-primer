@@ -4,10 +4,12 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	"github.com/lingjiao0710/test/goprogramming/sorter/algorithm/bubblesort"
 	"github.com/lingjiao0710/test/goprogramming/sorter/algorithm/qsort"
 	"io"
 	"os"
 	"strconv"
+	"time"
 )
 
 var infile *string = flag.String("i", "unsorted.dat", "需要排序的文件")
@@ -77,19 +79,26 @@ func main() {
 	flag.Parse()
 
 	if infile != nil {
-		fmt.Println("infile =", *infile, "outfile =", *outfile, "algorithm =", *algorithm)
+		fmt.Println("infile =", *infile, "outfile=", *outfile, "algorithm=", *algorithm)
 	}
 
 	values, err := readValues(*infile)
-	if err != nil {
+	if err == nil {
+		tStart := time.Now()
+		switch *algorithm {
+		case "qsort":
+			qsort.QuickSort(values)
+		case "bubblesort":
+			bubblesort.BubbleSort(values)
+		default:
+			fmt.Println("Sorting algorithm", *algorithm, "is either unknown or unsupported.")
+		}
+		tEnd := time.Now()
+		fmt.Println("The soring process costs", tEnd.Sub(tStart), "to complete.")
+
+		writeValues(values, *outfile)
+	} else {
 		fmt.Println(err)
 	}
-
-	fmt.Println("读取数据：", values)
-	//bubblesort.BubbleSort(values)
-	qsort.QuickSort(values)
-	fmt.Println("排序数据：", values)
-
-	writeValues(values, *outfile)
 
 }
