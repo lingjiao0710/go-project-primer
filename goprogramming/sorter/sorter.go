@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	"github.com/lingjiao0710/test/goprogramming/sorter/algorithm/qsort"
 	"io"
 	"os"
 	"strconv"
@@ -55,6 +56,23 @@ func readValues(infile string) (values []int, err error) {
 	return
 }
 
+func writeValues(values []int, outfile string) (err error) {
+	file, err := os.Create(outfile)
+	if err != nil {
+		fmt.Printf("打开文件 %s 失败\n", outfile)
+		return
+	}
+
+	defer file.Close()
+
+	for _, value := range values {
+		str := strconv.Itoa(value)
+		file.WriteString(str + "\n")
+	}
+
+	return nil
+}
+
 func main() {
 	flag.Parse()
 
@@ -68,5 +86,10 @@ func main() {
 	}
 
 	fmt.Println("读取数据：", values)
+	//bubblesort.BubbleSort(values)
+	qsort.QuickSort(values)
+	fmt.Println("排序数据：", values)
+
+	writeValues(values, *outfile)
 
 }
