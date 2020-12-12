@@ -8,7 +8,7 @@
 
 - ### GO版本网易云音乐ncm文件格式转换 [ncmdump](https://github.com/yoki123/ncmdump)
 
-- ### GO语言编程项目代码 [go programming language] (https://github.com/lingjiao0710/go-project-primer/tree/master/goprogramming)
+- ### GO语言编程项目代码 [go programming language](https://github.com/lingjiao0710/go-project-primer/tree/master/goprogramming)
   
 - ### Gophercises-01 测验 [quiz](https://github.com/lingjiao0710/go-project-primer/tree/master/gophercise/01quiz)
 
