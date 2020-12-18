@@ -45,8 +45,8 @@ func (p WavPlayer) Play(source string, channel chan bool) {
 			fmt.Printf("value %t %v\n", value, value)
 			return
 		default:
-			fmt.Println("playing ", source)
-			time.Sleep(time.Second)
+			//fmt.Println("playing ", source)
+			//time.Sleep(time.Second)
 		}
 	}
 }

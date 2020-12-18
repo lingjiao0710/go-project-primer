@@ -24,6 +24,7 @@ $ go run mplayer.go
 		lib add <name><artist><source><type> --Add a music to the music lib
 		lib remove <id> --Remove the specified music from the lib
 		play <name> -- Play the specified music
+		stop --stop the running player
 	
 Enter command -> lib add gelka MJ gelka.mp3 MP3
 Enter command -> play gelka
