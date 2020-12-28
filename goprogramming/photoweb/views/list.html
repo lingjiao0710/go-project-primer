@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List</title>
+</head>
+<body>
+<ol>
+    <!--range 语句在模板中是一个循环过程体，紧跟在range后面的必须是一个array、slice或
+map类型的变量。在 list.html 模板中，images是一组string类型的切片。在使用range语句遍
+历的过程中，.即表示该循环体中的当前元素，.|formatter表示对当前这个元素的值以 formatter
+方式进行格式化输出，比如.|urlquery}即表示对当前元素的值进行转换以适合作为URL一部
+分，而.|html 表示对当前元素的值进行适合用于HTML 显示的字符转化，比如">"会被转义
+成"&gt;"。
+如果range关键字后面紧跟的是map这样的多维复合结构，循环体中的当前元素可以
+用.key1.key2.keyN这样的形式表示。-->
+    {{range $.images}}
+    <li><a href="/view?id={{.|urlquery}}">{{.|html}}</a></li>
+    {{end}}
+</ol>
+</body>
+</html>

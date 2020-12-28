@@ -2,21 +2,25 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"path"
 	"path/filepath"
 )
 
 const (
 	UPLOAD_DIR = "uploads"
+	VIEW_DIR   = "views"
 )
 
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	/*结合main()和uploadHandler()方法，针对 HTTP GET 方式请求 /upload 路径，
 	程序将会往http.ResponseWriter类型的实例对象w中写入一段HTML文本，即输出一个HTML
-	上传表单。如果我们使用浏览器访问这个地址，那么网页上将会是一个可以上传文件的表单。*/
+	上传表单。如果我们使用浏览器访问这个地址，那么网页上将会是一个可以上传文件的表单。
 	if r.Method == "GET" {
 		io.WriteString(w, "<form method=\"POST\" action=\"/upload\" "+
 			" enctype=\"multipart/form-data\">"+
@@ -24,6 +28,20 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 			"<input type=\"submit\" value=\"Upload\" />"+
 			"</form>")
 		return
+	}
+	*/
+	if r.Method == "GET" {
+		/*files, err := template.ParseFiles("views/upload.html")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		files.Execute(w, nil)*/
+		err := rederHtml(w, "upload", nil)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
 
 	/*如果是客户端发起的HTTP POST 请求，那么首先从表单提交过来的字段寻找名为 image 的文
@@ -90,6 +108,56 @@ func viewHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, imagePath)
 }
 
+/*
+程序先从./uploads目录中遍历得到所有文件并赋
+值到fileInfoArr 变量里。fileInfoArr 是一个数组，其中的每一个元素都是一个文件对象。
+然后，程序遍历fileInfoArr数组并从中得到图片的名称，用于在后续的HTML片段中显示文件
+名和传入的参数内容。listHtml变量用于在for循序中将图片名称一一串联起来生成一段
+HTML，最后调用io.WriteString()方法将这段HTML输出返回给客户端。*/
+func listHandler(w http.ResponseWriter, r *http.Request) {
+	dir, err := ioutil.ReadDir("uploads")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	/*	var listHtml string
+		for _, fileInfo := range dir {
+			imgId := fileInfo.Name()
+			listHtml += "<li><a href=\"/view?id=" + imgId + "\">imgId</a></li>"
+		}
+
+		io.WriteString(w, "<ol>"+listHtml+"</ol>")*/
+	locals := make(map[string]interface{})
+	images := []string{}
+
+	for _, fileInfo := range dir {
+		images = append(images, fileInfo.Name())
+	}
+
+	locals["images"] = images
+	//files, err := template.ParseFiles("list.html")
+	//if err != nil {
+	//	http.Error(w, err.Error(), http.StatusInternalServerError)
+	//	return
+	//}
+	//files.Execute(w, locals)
+
+	err = rederHtml(w, "list", locals)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+}
+
+func rederHtml(w http.ResponseWriter, tmpl string, locals map[string]interface{}) (err error) {
+	tmpl += ".html"
+
+	templates[tmpl].Execute(w, locals)
+	return
+}
+
 func isExists(path string) bool {
 	_, err := os.Stat(path)
 	fmt.Println(os.IsExist(err))
@@ -100,10 +168,35 @@ func isExists(path string) bool {
 	return os.IsExist(err)
 }
 
+//templates := make(map[string]*template.Template)
+var templates = make(map[string]*template.Template)
+
+func init() {
+	dir, err := ioutil.ReadDir(VIEW_DIR)
+	if err != nil {
+		panic(err)
+	}
+
+	var templateName, templatePath string
+
+	for _, fileInfo := range dir {
+		templateName = fileInfo.Name()
+		if ext := path.Ext(templateName); ext != ".html" {
+			continue
+		}
+		templatePath = filepath.Join(VIEW_DIR, templateName)
+		fmt.Println("loading template:", templatePath)
+		t := template.Must(template.ParseFiles(templatePath))
+		templates[templateName] = t
+	}
+
+}
+
 func main() {
 
 	http.HandleFunc("/upload", uploadHandler)
 	http.HandleFunc("/view", viewHandler)
+	http.HandleFunc("/", listHandler)
 
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
