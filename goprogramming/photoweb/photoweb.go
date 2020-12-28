@@ -80,8 +80,24 @@ func viewHandler(w http.ResponseWriter, r *http.Request) {
 	imageId := r.FormValue("id")
 	imagePath := filepath.Join(UPLOAD_DIR, imageId)
 	fmt.Println(imagePath)
+
+	if exists := isExists(imagePath); !exists {
+		http.NotFound(w, r)
+		return
+	}
+
 	w.Header().Set("Content-Type", "image")
 	http.ServeFile(w, r, imagePath)
+}
+
+func isExists(path string) bool {
+	_, err := os.Stat(path)
+	fmt.Println(os.IsExist(err))
+	if err == nil {
+		return true
+	}
+
+	return os.IsExist(err)
 }
 
 func main() {
